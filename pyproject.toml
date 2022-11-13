@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "t212-tax-and-profit"
+version = "0.1.0"
+description = "Trading 212 exported CSV tax and profit calculator."
+authors = ["Omar Osman"]
+license = "GPL3"
+readme = "README.md"
+packages = [{include = "t212_tax_and_profit"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+jupyter = "^1.0.0"
+pydantic = "^1.10.2"
+pandas = "^1.5.1"
+plotly = "^5.11.0"
+numpy = "^1.23.4"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.15.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
