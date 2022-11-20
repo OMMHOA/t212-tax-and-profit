@@ -1,0 +1,4 @@
+from services.event_processors.processor import EventProcessor
+from services.event_processors.deposit_withdrawal import DepositWithdrawalProcessor
+from services.event_processors.dividend import DividendProcessor
+from services.event_processors.profit_loss import ProfitLossProcessor

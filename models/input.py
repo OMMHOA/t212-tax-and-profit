@@ -1,5 +1,5 @@
-from pydantic import BaseModel
 from datetime import datetime
+from pydantic.dataclasses import dataclass
 from enum import Enum
 
 
@@ -13,7 +13,8 @@ class Action(Enum):
     LIMIT_SELL = "limit sell"
 
 
-class CSVInput(BaseModel):
+@dataclass(frozen=True, eq=True)
+class Event:
     action: Action = None
     time: datetime = None
     isin: str = None
@@ -35,7 +36,5 @@ class CSVInput(BaseModel):
     french_tax: float = 0
     conversion_fee_eur: float = 0
 
-    class Config:  
-        use_enum_values = True
-        allow_mutation = False
+    class Config:
         anystr_strip_whitespace = True

@@ -130,3 +130,7 @@ dmypy.json
 
 # Input csv files
 input/*.csv
+
+
+# VS Code
+.vscode

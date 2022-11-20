@@ -1,5 +1,4 @@
-from model import CSVInput
-from model import Action
+from models.input import Event, Action
 import os
 from datetime import datetime
 
@@ -45,6 +44,7 @@ action_mapper = {
     "Limit sell": Action.LIMIT_SELL,
 }
 
+
 def to_action(x):
     return action_mapper[x.strip()]
 
@@ -73,19 +73,33 @@ header_to_converter_mapping = {
 }
 
 
+def deduplicate(csv_inputs: list[Event]) -> list[Event]:
+    input_set = set()
+    deduplicated = []
+    for l in csv_inputs:
+        if l not in input_set:
+            deduplicated.append(l)
+            input_set.add(l)
+    return deduplicated
+
 
 def consolidate(input_dir):
     inputs = []
+    # parse from csv files
     for csv in os.listdir(input_dir):
         if csv == ".keep":
             continue
-        with open(f"{input_dir}/{csv}", 'r') as fo:
-            headers = [header_to_field_mapping[h.strip()] for h in fo.readline().split(',')]
+        with open(f"{input_dir}/{csv}", "r") as fo:
+            headers = [
+                header_to_field_mapping[h.strip()] for h in fo.readline().split(",")
+            ]
             for line in fo:
                 m = {}
-                for i, v in enumerate(line.split(',')):
+                for i, v in enumerate(line.split(",")):
                     header = headers[i]
                     m[header] = header_to_converter_mapping[header](v)
-                inputs.append(CSVInput(**m))
-    print(f"Consolidation done, got {len(inputs)} consolidated but not deduplicated rows.")
+                inputs.append(Event(**m))
+
+    inputs = deduplicate(inputs)
+    print(f"Consolidation done, got {len(inputs)} consolidated rows.")
     return inputs

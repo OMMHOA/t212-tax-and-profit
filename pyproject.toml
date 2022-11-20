@@ -11,12 +11,12 @@ packages = [{include = "t212_tax_and_profit"}]
 python = "^3.10"
 jupyter = "^1.0.0"
 pydantic = "^1.10.2"
-pandas = "^1.5.1"
 plotly = "^5.11.0"
 numpy = "^1.23.4"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.5"
+black = {version = "^22.10.0", allow-prereleases = true}
 
 [build-system]
 requires = ["poetry-core"]
