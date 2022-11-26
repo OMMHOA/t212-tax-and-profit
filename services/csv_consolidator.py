@@ -1,6 +1,7 @@
 from models.input import Event, Action
 import os
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 
 header_to_field_mapping = {
     "Action": "action",
@@ -26,11 +27,11 @@ header_to_field_mapping = {
 }
 
 
-def to_float(x):
+def to_decimal(x):
     try:
         x = x.strip()
-        return float(x) if x else 0.0
-    except ValueError as ex:
+        return Decimal(x) if x else 0.0
+    except InvalidOperation as ex:
         return 0
 
 
@@ -55,21 +56,21 @@ header_to_converter_mapping = {
     "isin": lambda x: x,
     "ticker": lambda x: x,
     "name": lambda x: x,
-    "shares_count": to_float,
-    "price_per_share": to_float,
+    "shares_count": to_decimal,
+    "price_per_share": to_decimal,
     "price_currency": lambda x: x,
-    "exchange_rate": to_float,
-    "result_eur": to_float,
-    "total_eur": to_float,
-    "withholding_tax": to_float,
+    "exchange_rate": to_decimal,
+    "result_eur": to_decimal,
+    "total_eur": to_decimal,
+    "withholding_tax": to_decimal,
     "withholding_tax_currency": lambda x: x,
-    "charge_amount_eur": to_float,
-    "deposit_fee_eur": to_float,
-    "stamp_duty_tax_eur": to_float,
+    "charge_amount_eur": to_decimal,
+    "deposit_fee_eur": to_decimal,
+    "stamp_duty_tax_eur": to_decimal,
     "notes": lambda x: x,
     "ID": lambda x: x,
-    "french_tax": to_float,
-    "conversion_fee_eur": to_float,
+    "french_tax": to_decimal,
+    "conversion_fee_eur": to_decimal,
 }
 
 

@@ -1,6 +1,7 @@
 from services.event_processors.processor import EventProcessor
 from models.input import Event
 from pydantic.dataclasses import dataclass
+from decimal import Decimal
 
 
 class DepositWithdrawalProcessor(EventProcessor):
@@ -19,9 +20,9 @@ class DepositWithdrawalProcessor(EventProcessor):
 
     @dataclass(frozen=True, eq=True)
     class Result:
-        deposit: float
-        deposit_fee: float
-        withdrawal: float
+        deposit: Decimal
+        deposit_fee: Decimal
+        withdrawal: Decimal
 
     def result(self) -> Result:
         return DepositWithdrawalProcessor.Result(

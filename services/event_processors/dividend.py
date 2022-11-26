@@ -1,6 +1,7 @@
 from services.event_processors.processor import EventProcessor
 from models.input import Event
 from pydantic.dataclasses import dataclass
+from decimal import Decimal
 
 
 class DividendProcessor(EventProcessor):
@@ -9,8 +10,8 @@ class DividendProcessor(EventProcessor):
         ticker: str
         name: str
         isin: str
-        dividend: float = 0
-        withholding_tax: float = 0
+        dividend: Decimal = 0
+        withholding_tax: Decimal = 0
         withholding_tax_currency: str = None
 
     def __init__(self) -> None:
