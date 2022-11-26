@@ -1,4 +1,5 @@
 from services.event_processors.processor import EventProcessor
+from models.output import Stock
 from models.input import Event
 from pydantic.dataclasses import dataclass
 from decimal import Decimal
@@ -7,9 +8,7 @@ from decimal import Decimal
 class DividendProcessor(EventProcessor):
     @dataclass
     class Dividend:
-        ticker: str
-        name: str
-        isin: str
+        stock: Stock
         dividend: Decimal = 0
         withholding_tax: Decimal = 0
         withholding_tax_currency: str = None
@@ -21,9 +20,7 @@ class DividendProcessor(EventProcessor):
     def process_dividend(self, event: Event):
         if event.isin not in self.dividends_per_stock:
             self.dividends_per_stock[event.isin] = DividendProcessor.Dividend(
-                ticker=event.ticker,
-                name=event.name,
-                isin=event.isin,
+                stock=Stock(ticker=event.ticker, name=event.name, isin=event.isin),
             )
         dividend = self.dividends_per_stock[event.isin]
         dividend.dividend += event.total_eur
