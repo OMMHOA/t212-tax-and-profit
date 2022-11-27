@@ -17,6 +17,7 @@ numpy = "^1.23.4"
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.5"
 black = {version = "^22.10.0", allow-prereleases = true}
+pytest = "^7.2.0"
 
 [build-system]
 requires = ["poetry-core"]
