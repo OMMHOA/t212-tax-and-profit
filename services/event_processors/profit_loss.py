@@ -36,12 +36,7 @@ class ProfitLossProcessor(EventProcessor):
 
     def process_buy(self, event: Event):
         self._register_stock(event)
-        buy_amount = (
-            event.total_eur
-            - event.french_tax
-            - event.conversion_fee_eur
-            - event.stamp_duty_tax_eur
-        )
+        buy_amount = event.total_eur
         buys = self._buys(event.isin)
         while buys.next is not None:
             buys = buys.next
@@ -51,12 +46,7 @@ class ProfitLossProcessor(EventProcessor):
 
     def process_sell(self, event: Event):
         self._register_stock(event)
-        profit = (
-            event.total_eur
-            - event.french_tax
-            - event.conversion_fee_eur
-            - event.stamp_duty_tax_eur
-        )
+        profit = event.total_eur
         sold_shares = event.shares_count
         buy = self._buys(event.isin)
         while buy is not None:
@@ -68,8 +58,10 @@ class ProfitLossProcessor(EventProcessor):
                 self._set_buys(event.isin, buy.next)
             else:
                 buy_price_per_share = buy.amount / buy.shares
+                amount_spent_on_shares = buy_price_per_share * sold_shares
                 buy.shares -= sold_shares
-                profit -= buy_price_per_share * sold_shares
+                buy.amount -= amount_spent_on_shares
+                profit -= amount_spent_on_shares
                 break
             buy = buy.next
         self._set_profit(event.isin, profit)

@@ -18,6 +18,11 @@ stock_dict = {
         "ticker": "AAPL",
         "name": "Apple",
         "isin": "US0378331005",
+    },
+    "pg": {
+        "ticker": "PG",
+        "name": "Procter & Gamble",
+        "isin": "US7427181091"
     }
 }
 
@@ -28,7 +33,7 @@ class EventGenerator:
         self.time: datetime = datetime.strptime("2022-09-01 13:00:00", "%Y-%m-%d %H:%M:%S")
         self.idx = 0
 
-    def buy_event(self, shares, price, stock="apple"):
+    def buy_event(self, shares, price_per_share, stock="apple"):
         self.time += timedelta(hours=1)
         self.idx += 1
         stock = stock_dict[stock]
@@ -39,16 +44,16 @@ class EventGenerator:
             ticker=stock["ticker"],
             name=stock["name"],
             shares_count=shares,
-            price_per_share=price/shares,
+            price_per_share=price_per_share,
             price_currency="USD",
             exchange_rate=1,
-            total_eur=price,
+            total_eur=price_per_share * shares,
             ID=f"EOF{self.idx:010d}",
             conversion_fee_eur=0.1,
         )
 
 
-    def sell_event(self, shares, price, stock="apple"):
+    def sell_event(self, shares, price_per_share, stock="apple"):
         self.time += timedelta(hours=1)
         self.idx += 1
         stock = stock_dict[stock]
@@ -59,10 +64,10 @@ class EventGenerator:
             ticker=stock["ticker"],
             name=stock["name"],
             shares_count=shares,
-            price_per_share=price/shares,
+            price_per_share=price_per_share,
             price_currency="USD",
             exchange_rate=1,
-            total_eur=price,
+            total_eur=price_per_share * shares,
             ID=f"EOF{self.idx:010d}",
             conversion_fee_eur=0.1,
             result_eur=0, # dont care
